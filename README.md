@@ -1,2 +1,3 @@
-# forticnp-api
-FortiCNP API
+# FortiCNP API
+
+FortiCNP API tools and examples

@@ -1,0 +1,1578 @@
+{
+	"info": {
+		"_postman_id": "8b6a7b41-8926-418e-b3d5-5ad3fede11c6",
+		"name": "FortiCNP",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "347075"
+	},
+	"item": [
+		{
+			"name": "Get Credentials Token",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Successful POST request\", function () {",
+							"    pm.expect(pm.response.code).to.be.oneOf([200, 201, 202]);",
+							"",
+							"    var jsonData = pm.response.json();",
+							"    pm.environment.set(\"access_token\", jsonData.access_token)",
+							"    pm.environment.set(\"refresh_token\", jsonData.refresh_token)",
+							"",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "oauth2",
+					"oauth2": [
+						{
+							"key": "headerPrefix",
+							"value": "Basic",
+							"type": "string"
+						},
+						{
+							"key": "addTokenTo",
+							"value": "header",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "grant_type",
+							"value": "client_credentials",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://www.forticnp.com/api/v1/auth/credentials/token/",
+					"protocol": "https",
+					"host": [
+						"www",
+						"forticnp",
+						"com"
+					],
+					"path": [
+						"api",
+						"v1",
+						"auth",
+						"credentials",
+						"token",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Refresh Token",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Successful POST request\", function () {",
+							"    pm.expect(pm.response.code).to.be.oneOf([200, 201, 202]);",
+							"",
+							"    var jsonData = pm.response.json();",
+							"    pm.environment.set(\"access_token\", jsonData.access_token)",
+							"    pm.environment.set(\"refresh_token\", jsonData.refresh_token)",
+							"",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "oauth2",
+					"oauth2": [
+						{
+							"key": "headerPrefix",
+							"value": "Basic",
+							"type": "string"
+						},
+						{
+							"key": "addTokenTo",
+							"value": "header",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "grant_type",
+							"value": "client_credentials",
+							"type": "text"
+						},
+						{
+							"key": "refresh_token",
+							"value": "{{refresh_token}}",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://www.forticnp.com/api/v1/auth/token/refresh",
+					"protocol": "https",
+					"host": [
+						"www",
+						"forticnp",
+						"com"
+					],
+					"path": [
+						"api",
+						"v1",
+						"auth",
+						"token",
+						"refresh"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Resource Map",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Successful GT request\", function () {",
+							"    pm.expect(pm.response.code).to.be.oneOf([200, 201, 202]);",
+							"",
+							"    var jsonData = pm.response.json();",
+							"    pm.environment.set(\"role_id\", jsonData[0].roleId)",
+							"    pm.environment.set(\"company_id\", jsonData[0].companyMapSet[0].companyId)",
+							"",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://www.forticnp.com/api/v1/resourceURLMap",
+					"protocol": "https",
+					"host": [
+						"www",
+						"forticnp",
+						"com"
+					],
+					"path": [
+						"api",
+						"v1",
+						"resourceURLMap"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Account Severity Level",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "companyId",
+						"value": "{{company_id}}",
+						"type": "text"
+					},
+					{
+						"key": "roleId",
+						"value": "{{role_id}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": []
+				},
+				"url": {
+					"raw": "https://www.forticnp.com/api/v1/dashboard/cloud/account/list",
+					"protocol": "https",
+					"host": [
+						"www",
+						"forticnp",
+						"com"
+					],
+					"path": [
+						"api",
+						"v1",
+						"dashboard",
+						"cloud",
+						"account",
+						"list"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Alert by Filter",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "companyId",
+						"value": "{{company_id}}",
+						"type": "text"
+					},
+					{
+						"key": "roleId",
+						"value": "{{role_id}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"startTime\": 1586459080637,\n    \"endTime\": 1586545480637,\n    \"id\": \"\",\n    \"user\": [],\n    \"activity\": [],\n    \"objectIdList\": [],\n    \"objectName\": \"\",\n    \"objectId\": \"\",\n    \"severity\": [],\n    \"status\": [],\n    \"city\": [],\n    \"idList\": [],\n    \"alertType\": [\n        \"Data Analysis\"\n    ],\n    \"alertState\": [\n        \"Open\"\n    ],\n    \"policyCodeList\": [],\n    \"policyCategories\": [],\n    \"serviceList\": [],\n    \"accountID\": [],\n    \"countryList\": [],\n    \"activityType\": [],\n    \"asc\": \"severityLevel\",\n    \"desc\": \"\",\n    \"skip\": 0,\n    \"limit\": 20\n}"
+				},
+				"url": {
+					"raw": "https://www.forticnp.com/api/v1/dashboard/cloud/account/list",
+					"protocol": "https",
+					"host": [
+						"www",
+						"forticnp",
+						"com"
+					],
+					"path": [
+						"api",
+						"v1",
+						"dashboard",
+						"cloud",
+						"account",
+						"list"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Alert Policy List",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "companyId",
+						"value": "{{company_id}}",
+						"type": "text"
+					},
+					{
+						"key": "roleId",
+						"value": "{{role_id}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": []
+				},
+				"url": {
+					"raw": "https://www.forticnp.com/api/v1/alert/policy/list",
+					"protocol": "https",
+					"host": [
+						"www",
+						"forticnp",
+						"com"
+					],
+					"path": [
+						"api",
+						"v1",
+						"alert",
+						"policy",
+						"list"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Country List",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "companyId",
+						"value": "{{company_id}}",
+						"type": "text"
+					},
+					{
+						"key": "roleId",
+						"value": "{{role_id}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": []
+				},
+				"url": {
+					"raw": "https://www.forticnp.com/api/v1/country/list",
+					"protocol": "https",
+					"host": [
+						"www",
+						"forticnp",
+						"com"
+					],
+					"path": [
+						"api",
+						"v1",
+						"country",
+						"list"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Document Activity",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "companyId",
+						"value": "{{company_id}}",
+						"type": "text"
+					},
+					{
+						"key": "roleId",
+						"value": "{{role_id}}",
+						"type": "text"
+					},
+					{
+						"key": "fileId",
+						"value": "{{file_id}}",
+						"type": "text"
+					},
+					{
+						"key": "service",
+						"value": "",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": []
+				},
+				"url": {
+					"raw": "https://www.forticnp.com/api/v1/profile/document/activity",
+					"protocol": "https",
+					"host": [
+						"www",
+						"forticnp",
+						"com"
+					],
+					"path": [
+						"api",
+						"v1",
+						"profile",
+						"document",
+						"activity"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Document Detail",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "companyId",
+						"value": "{{company_id}}",
+						"type": "text"
+					},
+					{
+						"key": "roleId",
+						"value": "{{role_id}}",
+						"type": "text"
+					},
+					{
+						"key": "fileId",
+						"value": "{{file_id}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": []
+				},
+				"url": {
+					"raw": "https://www.forticnp.com/api/v1/profile/document/detail",
+					"protocol": "https",
+					"host": [
+						"www",
+						"forticnp",
+						"com"
+					],
+					"path": [
+						"api",
+						"v1",
+						"profile",
+						"document",
+						"detail"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Document Violation",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "companyId",
+						"value": "{{company_id}}",
+						"type": "text"
+					},
+					{
+						"key": "roleId",
+						"value": "{{role_id}}",
+						"type": "text"
+					},
+					{
+						"key": "fileId",
+						"value": "{{file_id}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": []
+				},
+				"url": {
+					"raw": "https://www.forticnp.com/api/v1/profile/document/violation",
+					"protocol": "https",
+					"host": [
+						"www",
+						"forticnp",
+						"com"
+					],
+					"path": [
+						"api",
+						"v1",
+						"profile",
+						"document",
+						"violation"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Event",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "companyId",
+						"value": "{{company_id}}",
+						"type": "text"
+					},
+					{
+						"key": "roleId",
+						"value": "{{role_id}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://www.forticnp.com/api/v1/event",
+					"protocol": "https",
+					"host": [
+						"www",
+						"forticnp",
+						"com"
+					],
+					"path": [
+						"api",
+						"v1",
+						"event"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Finding List",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "companyId",
+						"value": "{{company_id}}",
+						"type": "text"
+					},
+					{
+						"key": "roleId",
+						"value": "{{role_id}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"skip\": 0,\n    \"limit\": 20,\n    \"endTime\": 1656201875000,\n    \"startTime\": 1655597075000,\n    \"objectId\": 8368758\n}"
+				},
+				"url": {
+					"raw": "https://www.forticnp.com/api/v2/finding/list",
+					"protocol": "https",
+					"host": [
+						"www",
+						"forticnp",
+						"com"
+					],
+					"path": [
+						"api",
+						"v2",
+						"finding",
+						"list"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Number of Malware Documents",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "companyId",
+						"value": "{{company_id}}",
+						"type": "text"
+					},
+					{
+						"key": "roleId",
+						"value": "{{role_id}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": []
+				},
+				"url": {
+					"raw": "https://www.forticnp.com/api/v1/dashboard/malware",
+					"protocol": "https",
+					"host": [
+						"www",
+						"forticnp",
+						"com"
+					],
+					"path": [
+						"api",
+						"v1",
+						"dashboard",
+						"malware"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Number of DLP Documents",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "companyId",
+						"value": "{{company_id}}",
+						"type": "text"
+					},
+					{
+						"key": "roleId",
+						"value": "{{role_id}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": []
+				},
+				"url": {
+					"raw": "https://www.forticnp.com/api/v1/dashboard/document/dlp",
+					"protocol": "https",
+					"host": [
+						"www",
+						"forticnp",
+						"com"
+					],
+					"path": [
+						"api",
+						"v1",
+						"dashboard",
+						"document",
+						"dlp"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Policy Risk",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "companyId",
+						"value": "{{company_id}}",
+						"type": "text"
+					},
+					{
+						"key": "roleId",
+						"value": "{{role_id}}",
+						"type": "text"
+					},
+					{
+						"key": "timezone",
+						"value": "{{time_zone}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"startTime\":1583358665810,\n    \"endTime\":1583445065810\n}"
+				},
+				"url": {
+					"raw": "https://www.forticnp.com/api/v1/dashboard/policy/risk",
+					"protocol": "https",
+					"host": [
+						"www",
+						"forticnp",
+						"com"
+					],
+					"path": [
+						"api",
+						"v1",
+						"dashboard",
+						"policy",
+						"risk"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Policy Violation",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "companyId",
+						"value": "{{company_id}}",
+						"type": "text"
+					},
+					{
+						"key": "roleId",
+						"value": "{{role_id}}",
+						"type": "text"
+					},
+					{
+						"key": "startTime",
+						"value": "0",
+						"type": "text"
+					},
+					{
+						"key": "endTime",
+						"value": "0",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": []
+				},
+				"url": {
+					"raw": "https://www.forticnp.com/api/v1/dashboard/policy/violation",
+					"protocol": "https",
+					"host": [
+						"www",
+						"forticnp",
+						"com"
+					],
+					"path": [
+						"api",
+						"v1",
+						"dashboard",
+						"policy",
+						"violation"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Resource Highlight",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "companyId",
+						"value": "{{company_id}}",
+						"type": "text"
+					},
+					{
+						"key": "roleId",
+						"value": "{{role_id}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": []
+				},
+				"url": {
+					"raw": "https://www.forticnp.com/api/v1/profile/resource/highlight/list",
+					"protocol": "https",
+					"host": [
+						"www",
+						"forticnp",
+						"com"
+					],
+					"path": [
+						"api",
+						"v1",
+						"profile",
+						"resource",
+						"highlight",
+						"list"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Ger Resource Config",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "companyId",
+						"value": "{{company_id}}",
+						"type": "text"
+					},
+					{
+						"key": "roleId",
+						"value": "{{role_id}}",
+						"type": "text"
+					},
+					{
+						"key": "resourceId",
+						"value": "{{resource_id}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"orderBy\": \"severity\",\n    \"orderDirection\": \"desc\",\n    \"limit\": 50,\n    \"skip\": 0\n}"
+				},
+				"url": {
+					"raw": "https://www.forticnp.com/api/workload/v2/profile/resource/tableView/configAssess",
+					"protocol": "https",
+					"host": [
+						"www",
+						"forticnp",
+						"com"
+					],
+					"path": [
+						"api",
+						"workload",
+						"v2",
+						"profile",
+						"resource",
+						"tableView",
+						"configAssess"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Resource Detail",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "companyId",
+						"value": "{{company_id}}",
+						"type": "text"
+					},
+					{
+						"key": "roleId",
+						"value": "{{role_id}}",
+						"type": "text"
+					},
+					{
+						"key": "rid",
+						"value": "{{r_id}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": []
+				},
+				"url": {
+					"raw": "https://www.forticnp.com/api/workload/v1/profile/resource/topology/detail",
+					"protocol": "https",
+					"host": [
+						"www",
+						"forticnp",
+						"com"
+					],
+					"path": [
+						"api",
+						"workload",
+						"v1",
+						"profile",
+						"resource",
+						"topology",
+						"detail"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Ger Resource List",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "companyId",
+						"value": "{{company_id}}",
+						"type": "text"
+					},
+					{
+						"key": "roleId",
+						"value": "{{role_id}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"filter\": {\n        \"resourceType\": {\n            \"option\": [\n                {\n                    \"key\": \"AzureCloud\",\n                    \"option\": [\n                        {\n                            \"key\": \"\"\n                        }\n                    ]\n                }\n            ]\n        },\n    },\n    \"skip\": 0,\n    \"limit\": 1,\n    \"orderDirection\": \"asc\",\n    \"orderBy\": \"risk_level\"\n}"
+				},
+				"url": {
+					"raw": "https://www.forticnp.com/api/workload/v1/profile/resource/list",
+					"protocol": "https",
+					"host": [
+						"www",
+						"forticnp",
+						"com"
+					],
+					"path": [
+						"api",
+						"workload",
+						"v1",
+						"profile",
+						"resource",
+						"list"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Resource Risk Level",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "companyId",
+						"value": "{{company_id}}",
+						"type": "text"
+					},
+					{
+						"key": "roleId",
+						"value": "{{role_id}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": []
+				},
+				"url": {
+					"raw": "https://www.forticnp.com/api/v1/dashboard/resource/risk",
+					"protocol": "https",
+					"host": [
+						"www",
+						"forticnp",
+						"com"
+					],
+					"path": [
+						"api",
+						"v1",
+						"dashboard",
+						"resource",
+						"risk"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Severity",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "companyId",
+						"value": "{{company_id}}",
+						"type": "text"
+					},
+					{
+						"key": "roleId",
+						"value": "{{role_id}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": []
+				},
+				"url": {
+					"raw": "https://www.forticnp.com/api/v1/severity",
+					"protocol": "https",
+					"host": [
+						"www",
+						"forticnp",
+						"com"
+					],
+					"path": [
+						"api",
+						"v1",
+						"severity"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Severity Alert",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "companyId",
+						"value": "{{company_id}}",
+						"type": "text"
+					},
+					{
+						"key": "roleId",
+						"value": "{{role_id}}",
+						"type": "text"
+					},
+					{
+						"key": "startTimer",
+						"value": "0",
+						"type": "text"
+					},
+					{
+						"key": "endtime",
+						"value": "0",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": []
+				},
+				"url": {
+					"raw": "https://www.forticnp.com/api/v1/dashboard/severity/alert",
+					"protocol": "https",
+					"host": [
+						"www",
+						"forticnp",
+						"com"
+					],
+					"path": [
+						"api",
+						"v1",
+						"dashboard",
+						"severity",
+						"alert"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Status Detail",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "companyId",
+						"value": "{{company_id}}",
+						"type": "text"
+					},
+					{
+						"key": "roleId",
+						"value": "{{role_id}}",
+						"type": "text"
+					},
+					{
+						"key": "service",
+						"value": "{{service}}",
+						"type": "text"
+					},
+					{
+						"key": "serviceId",
+						"value": "{{service_id}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": []
+				},
+				"url": {
+					"raw": "https://www.forticnp.com/api/v1/service/status/detail",
+					"protocol": "https",
+					"host": [
+						"www",
+						"forticnp",
+						"com"
+					],
+					"path": [
+						"api",
+						"v1",
+						"service",
+						"status",
+						"detail"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Status List",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "companyId",
+						"value": "{{company_id}}",
+						"type": "text"
+					},
+					{
+						"key": "roleId",
+						"value": "{{role_id}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://www.forticnp.com/api/v1/service/status/list",
+					"protocol": "https",
+					"host": [
+						"www",
+						"forticnp",
+						"com"
+					],
+					"path": [
+						"api",
+						"v1",
+						"service",
+						"status",
+						"list"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Storage Risk",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "companyId",
+						"value": "{{company_id}}",
+						"type": "text"
+					},
+					{
+						"key": "roleId",
+						"value": "{{role_id}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://www.forticnp.com/api/v1/dashboard/storage/risk",
+					"protocol": "https",
+					"host": [
+						"www",
+						"forticnp",
+						"com"
+					],
+					"path": [
+						"api",
+						"v1",
+						"dashboard",
+						"storage",
+						"risk"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Virtual Machine Overview",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "companyId",
+						"value": "{{company_id}}",
+						"type": "text"
+					},
+					{
+						"key": "roleId",
+						"value": "{{role_id}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://www.forticnp.com/api/v1/dashboard/vm",
+					"protocol": "https",
+					"host": [
+						"www",
+						"forticnp",
+						"com"
+					],
+					"path": [
+						"api",
+						"v1",
+						"dashboard",
+						"vm"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
